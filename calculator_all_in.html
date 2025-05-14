@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        align-content: center;
+        display: grid;
+        justify-content: center;
+        height: 100vh;
+    }
+    .container {
+        display: grid;
+        background-color: rgb(0, 0, 0);
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+        border-radius: 15px;
+        
+        padding: 20px 25px;
+    }
+    input{
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 20px;
+        text-align: right;
+        
+    }
+
+    .button-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+    }
+    .item{
+        border: none;
+        padding: 15px;
+        border-radius: 20px;
+        font-size: medium;
+        cursor: pointer;
+        
+    }
+    .item:hover{
+        background-color: rgb(212, 209, 209);
+        color: rgb(0, 0, 0);
+    }
+    .item1{
+        border: none;
+        padding: 15px;
+        border-radius: 20px;
+        font-size: medium;
+        background-color: rgb(255, 123, 0);
+        color: white;
+        cursor: pointer;
+    }
+    .item1:hover{
+        background-color: rgb(239, 167, 101);
+        color: white;
+    }
+    .item2{
+        border: none;
+        padding: 15px;
+        border-radius: 20px;
+        font-size: large;
+        cursor: pointer;
+        color: rgb(255, 102, 0);
+    }
+    .item2:hover{
+        background-color: rgb(241, 200, 165);
+        color: rgb(0, 0, 0);
+    }
+</style>
+<body>
+    <div class="container">
+        <input type="text" id="">
+        <div class="button-container">
+            <button class="item1">AC</button>
+            <button class="item2">%</button>
+            <button class="item2">Del</button>
+            <button class="item2">/</button>
+            <button class="item">7</button>
+            <button class="item">8</button>
+            <button class="item">9</button>
+            <button class="item2">*</button>
+            <button class="item">4</button>
+            <button class="item">5</button>
+            <button class="item">6</button>
+            <button class="item2">-</button>
+            <button class="item">1</button>
+            <button class="item">2</button>
+            <button class="item">3</button>
+            <button class="item2">+</button>
+            <button class="item">00</button>
+            <button class="item">0</button>
+            <button class="item">.</button>
+            <button class="item1">=</button>
+        </div>
+    </div>
+    <!-- JavaScript part -->
+    <script>
+        // 🟢 1. Sab buttons ko select karo (HTML se link)
+        // Yeh line HTML ke <button> tag ke sabhi elements ko pakadti hai
+        const buttons = document.querySelectorAll("button");
+
+        // 🟢 2. Input box ko select karo (HTML ke <input> se link)
+        const input = document.querySelector("input");
+
+        // 🟢 3. Ek variable banaya jisme hum user ka input store karte hain
+        let expression = "";
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+            const value = button.textContent;  // button ke andar likha hua text
+
+            if (value === "AC") {
+                // Sab clear kar do
+                expression = "";    // sab kuch reset kar do
+                input.value = "";   // screen ko bhi clear kar do
+            } else if (value === "Del") {
+                // Last character hata do
+                expression = expression.slice(0, -1);   // last character hatao
+                input.value = expression;
+            } else if (value === "=") {
+                try {
+                // % ko (number / 100) me convert karo
+                // 💡 1. Agar % likha ho to usse (value / 100) me badal do
+                let finalExpression = expression
+
+                    // 💡 2. Leading zeros hatao: 032 → 32, 005 → 5
+                    .replace(/(\d+)%/g, (match, p1) => `(${p1}/100)`)
+
+                    // ✅ Leading zeros hatao: 032 → 32
+                    .replace(/\b0+(\d+)/g, (match, p1) => p1);
+                
+                // 💡 3. JavaScript ka eval() function expression ko solve karta hai
+                let result = eval(finalExpression);
+
+                // 💡 4. Result ko display me dikhaye aur future ke liye store kare
+                expression = result.toString();
+                input.value = expression;
+                } catch {
+                input.value = "Error";   // screen pe "Error" dikhaye
+                }
+            } else {
+                // Normal value add karo
+                expression += value;     // expression me add karo
+                input.value = expression;   // screen pe dikhaye
+            }
+            });
+        });
+    </script>
+
+
+</body>
+</html>
